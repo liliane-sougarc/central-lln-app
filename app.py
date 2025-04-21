@@ -1,4 +1,3 @@
-
 import streamlit as st
 import time
 from datetime import datetime
@@ -10,7 +9,6 @@ st.markdown("""
 **Criado por:** Liliane de Souza Garcia  
 **Marca:** LLN Automações  
 **Missão:** Automatizar, organizar e potencializar ideias com dados, propósito e inteligência.
-
 ---
 """)
 
@@ -75,20 +73,6 @@ total = sum(st.session_state.tempos.get(projeto, []))
 st.sidebar.markdown(f"**⏳ Tempo acumulado hoje:** {total:.2f} min")
 
 # Conteúdo principal
-
-# Bloco para adicionar múltiplas tarefas ao checklist
-st.markdown("### ✍️ Adicionar tarefas personalizadas")
-nova_lista = st.text_area("Cole ou escreva uma lista de tarefas (uma por linha):")
-
-if st.button("➕ Adicionar Tarefas Personalizadas"):
-    tarefas_personalizadas = [t.strip() for t in nova_lista.split("
-") if t.strip()]
-    if tarefas_personalizadas:
-        st.session_state[f"tarefas_extra_{projeto}"] = tarefas_personalizadas
-        st.success(f"{len(tarefas_personalizadas)} tarefas adicionadas.")
-    else:
-        st.warning("Nenhuma tarefa válida foi detectada.")
-
 tarefas_padrao = [
     "Planejar próximos passos",
     "Atualizar documentação",
@@ -105,6 +89,18 @@ def checklist(tarefas):
         if st.checkbox(tarefa, key=f"{projeto}-{tarefa}"):
             concluido.append(tarefa)
     st.success(f"{len(concluido)} de {len(tarefas)} tarefas concluídas.")
+
+# Bloco para adicionar múltiplas tarefas ao checklist
+st.markdown("### ✍️ Adicionar tarefas personalizadas")
+nova_lista = st.text_area("Cole ou escreva uma lista de tarefas (uma por linha):")
+
+if st.button("➕ Adicionar Tarefas Personalizadas"):
+    tarefas_personalizadas = [t.strip() for t in nova_lista.split("\n") if t.strip()]
+    if tarefas_personalizadas:
+        st.session_state[f"tarefas_extra_{projeto}"] = tarefas_personalizadas
+        st.success(f"{len(tarefas_personalizadas)} tarefas adicionadas.")
+    else:
+        st.warning("Nenhuma tarefa válida foi detectada.")
 
 # Checklists por projeto
 if projeto == "Radar Climático – LLN":
@@ -157,4 +153,3 @@ tarefas_extra = st.session_state.get(f"tarefas_extra_{projeto}", [])
 if tarefas_extra:
     st.markdown("### ✅ Tarefas Personalizadas")
     checklist(tarefas_extra)
-
